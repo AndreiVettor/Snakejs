@@ -1,6 +1,8 @@
 let canvas = document.getElementById('mainCanvas');
 let ctx = canvas.getContext('2d');
 
+let backgroundColor = 'white';
+
 let gridSize = 32;
 let fps = 60;
 
@@ -16,6 +18,14 @@ class Vector2 {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+    }
+
+    static Zero() {
+        return new Vector2(0, 0);
+    }
+
+    static gridSize() {
+        return new Vector2(gridSize, gridSize);
     }
 
     copy(vector) {
@@ -110,7 +120,7 @@ class Snake {
     }
 
     addBodyPart(position) {
-        this.body.unshift({position: position.clone()});
+        this.body.unshift({ position: position.clone() });
         this.length = this.body.length;
     }
 
@@ -173,16 +183,16 @@ class Snake {
     }
 }
 
-function drawRectangle(ctx, position, color) {
+function drawRectangle(ctx, position, color, size = Vector2.gridSize()) {
     ctx.beginPath();
     ctx.fillStyle = color;
-    ctx.rect(position.x, position.y, gridSize, gridSize);
+    ctx.rect(position.x, position.y, size.x, size.y);
     ctx.fill();
     ctx.closePath();
 }
 
 function clearScreen(ctx, canvas) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawRectangle(ctx, Vector2.Zero(), backgroundColor, new Vector2(canvas.width, canvas.height));
 }
 
 function checkFood(snake, food) {
